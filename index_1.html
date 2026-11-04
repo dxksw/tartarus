@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тартарус — клуб в стиле казино без ставок</title>
+<meta name="description" content="«Тартарус» — развлекательный клуб в стиле казино, где нельзя проиграть деньги. Учебный проект деловой игры «Создай успешный бизнес».">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --obsidian: #14100D;
+  --ember: #211A15;
+  --line: #3A2F25;
+  --ivory: #F1E8D8;
+  --ivory-2: #CFC4B2;
+  --muted: #A09584;
+  --gold: #C9A24A;
+  --gold-deep: #8F6B26;
+  --garnet: #9E3328;
+  --garnet-text: #E58A78;
+  --patina: #2E5B4B;
+  --patina-text: #86C2AC;
+  --display: "Forum", Georgia, "Times New Roman", serif;
+  --text: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--obsidian); color: var(--ivory); font: 400 17px/1.6 var(--text); }
+svg, video { display: block; max-width: 100%; }
+a { color: var(--gold); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: 20px; padding-right: 20px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* шапка */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; padding-top: 20px; padding-bottom: 20px; }
+.mark { font-family: var(--display); font-size: 24px; letter-spacing: .12em; color: var(--gold); text-decoration: none; }
+.top nav { display: flex; gap: 6px 20px; flex-wrap: wrap; }
+.top nav a { color: var(--ivory-2); text-decoration: none; font-size: 15px; }
+.top nav a:hover { color: var(--ivory); }
+
+/* первый экран */
+.hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; padding-top: 40px; padding-bottom: 88px; }
+.brand { font-family: var(--display); font-weight: 400; font-size: clamp(60px, 9vw, 112px); line-height: .95; letter-spacing: .06em; margin: 0 0 20px; color: var(--gold); background: linear-gradient(180deg, #F2D892 0%, #C9A24A 55%, #8F6B26 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.meander { width: 240px; height: 12px; margin: 0 0 28px; }
+.tagline { font-family: var(--display); font-size: clamp(26px, 3.2vw, 34px); line-height: 1.2; margin: 0 0 16px; }
+.intro { color: var(--ivory-2); max-width: 34em; margin: 0 0 16px; }
+.slogan { color: var(--gold); margin: 0; }
+
+/* рулетка */
+.game { display: grid; justify-items: center; gap: 22px; }
+.wheel-box { position: relative; width: min(400px, 84vw); aspect-ratio: 1; }
+.wheel-box::before { content: ""; position: absolute; inset: -16%; background: radial-gradient(circle, rgba(201,162,74,.16) 0%, rgba(201,162,74,0) 62%); pointer-events: none; }
+#wheel { position: relative; width: 100%; height: 100%; transition: transform 4.2s cubic-bezier(.12,.62,.08,1); }
+.pointer { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 22px solid var(--gold); z-index: 2; filter: drop-shadow(0 2px 2px rgba(0,0,0,.55)); }
+.controls { width: min(420px, 100%); display: grid; gap: 14px; }
+.seg { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.seg legend { font-size: 14px; color: var(--muted); padding: 0; margin-bottom: 6px; }
+.seg label { position: relative; }
+.seg input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.seg span { display: inline-block; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--ember); color: var(--ivory-2); font-size: 15px; font-weight: 600; }
+.seg input:checked + span { background: var(--gold); border-color: var(--gold); color: var(--obsidian); }
+.seg input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 3px; }
+.spin-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.btn { font: 700 17px/1 var(--text); color: var(--obsidian); background: var(--gold); border: 0; border-radius: 10px; padding: 14px 30px; cursor: pointer; }
+.btn:hover { background: #D8B35C; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.balance { font-size: 15px; color: var(--ivory-2); }
+.balance b { font-size: 22px; color: var(--ivory); font-variant-numeric: tabular-nums; }
+.result { margin: 0; min-height: 3.2em; }
+.history { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; flex-wrap: wrap; min-height: 30px; }
+.history li { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 700; color: var(--ivory); }
+.c-red { background: var(--garnet); }
+.c-black { background: #2A221C; border: 1px solid #4A3D31; }
+.c-green { background: var(--patina); }
+.linkbtn { justify-self: start; background: none; border: 0; padding: 0; color: var(--gold); font: 600 15px var(--text); text-decoration: underline; cursor: pointer; }
+.fine { font-size: 14px; color: var(--muted); margin: 0; }
+
+/* разделы */
+.block { padding-top: 72px; padding-bottom: 72px; border-top: 1px solid var(--line); }
+h2 { font-family: var(--display); font-weight: 400; font-size: clamp(32px, 4vw, 44px); line-height: 1.15; margin: 0 0 18px; }
+h3 { font-size: 19px; font-weight: 700; margin: 0 0 6px; }
+.lead { color: var(--ivory-2); max-width: 40em; margin: 0 0 36px; }
+.trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin: 0 0 36px; }
+.trio > div { border-top: 2px solid var(--gold); padding-top: 16px; }
+.trio p { margin: 0; color: var(--ivory-2); }
+.aside { color: var(--muted); max-width: 46em; margin: 0; }
+
+/* инвестору */
+.invest { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+.slider-label { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; font-weight: 600; margin-bottom: 10px; }
+.slider-label output { font-family: var(--display); font-size: 48px; line-height: 1; color: var(--gold); }
+input[type=range] { width: 100%; accent-color: var(--gold); margin: 0; }
+.scale { position: relative; height: 44px; font-size: 13px; color: var(--muted); }
+.scale span { position: absolute; top: 10px; }
+.scale .lo { left: 0; }
+.scale .hi { right: 0; }
+.scale .be { left: 31.6%; transform: translateX(-50%); color: var(--patina-text); white-space: nowrap; }
+.scale .be::before { content: ""; position: absolute; left: 50%; top: -9px; width: 2px; height: 8px; background: var(--patina-text); }
+.status { margin: 4px 0 0; font-weight: 600; }
+.status.ok { color: var(--patina-text); }
+.status.bad { color: var(--garnet-text); }
+.ledger { margin: 0; border-top: 1px solid var(--line); }
+.ledger > div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px dotted var(--line); }
+.ledger dt { color: var(--ivory-2); }
+.ledger dd { margin: 0; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ledger .sum { border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); }
+.ledger .sum dt, .ledger .sum dd { color: var(--ivory); font-size: 19px; font-weight: 700; }
+.ledger .sum dd.neg { color: var(--garnet-text); }
+.vat { margin: 14px 0 0; font-size: 14px; color: var(--gold); }
+
+/* ролик */
+.video-frame { aspect-ratio: 16 / 9; border: 1px solid var(--gold-deep); border-radius: 12px; overflow: hidden; background: var(--ember); display: grid; place-items: center; }
+.video-frame video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+.video-missing { margin: 0; padding: 24px; text-align: center; color: var(--muted); }
+
+/* вопросы */
+.faq { max-width: 780px; }
+.faq details { border-bottom: 1px solid var(--line); padding: 16px 0; }
+.faq summary { display: flex; justify-content: space-between; gap: 16px; cursor: pointer; list-style: none; font-size: 18px; font-weight: 700; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font-family: var(--display); font-size: 28px; line-height: 1; color: var(--gold); }
+.faq details[open] summary::after { content: "−"; }
+.faq details p { margin: 10px 0 0; color: var(--ivory-2); max-width: 42em; }
+
+/* подвал */
+.foot { padding-top: 40px; padding-bottom: 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+.foot p { margin: 0 0 6px; }
+
+@media (max-width: 860px) {
+  .hero, .invest { grid-template-columns: 1fr; gap: 40px; }
+  .hero { padding-top: 16px; padding-bottom: 64px; }
+  .trio { grid-template-columns: 1fr; gap: 24px; }
+  .block { padding-top: 56px; padding-bottom: 56px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  #wheel { transition-duration: .01s; }
+}
+</style>
+</head>
+<body>
+
+<header class="top wrap">
+  <a class="mark" href="#igra">Тартарус</a>
+  <nav aria-label="Разделы сайта">
+    <a href="#igra">Сыграть</a>
+    <a href="#klub">О клубе</a>
+    <a href="#investoru">Инвестору</a>
+    <a href="#rolik">Ролик</a>
+    <a href="#voprosy">Вопросы</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero wrap" id="igra">
+    <div>
+      <h1 class="brand">Тартарус</h1>
+      <svg class="meander" viewBox="0 0 600 24" aria-hidden="true"><defs><pattern id="mk" width="40" height="24" patternUnits="userSpaceOnUse"><path d="M0,23 H40 M2,23 V1 H36 V17 H12 V9 H26" fill="none" stroke="#C9A24A" stroke-width="2"/></pattern></defs><rect width="600" height="24" fill="url(#mk)"/></svg>
+      <p class="tagline">Клуб в стиле казино, где нельзя проиграть деньги</p>
+      <p class="intro">Рулетка, покер и блэкджек на фишки, кафе и праздники в тёмном зале с античными колоннами. Фишки выдаются вместе с билетом и ничего не стоят — играем ради эмоций.</p>
+      <p class="slogan">Главное — не выигрыш, а впечатления.</p>
+    </div>
+
+    <div class="game">
+      <h2 class="sr">Мини-рулетка на фишки</h2>
+      <div class="wheel-box">
+        <div class="pointer" aria-hidden="true"></div>
+        <svg id="wheel" viewBox="-100 -100 200 200" role="img" aria-label="Колесо рулетки"></svg>
+      </div>
+      <div class="controls">
+        <fieldset class="seg">
+          <legend>Ставка на</legend>
+          <label><input type="radio" name="bet" value="red" checked><span>Красное</span></label>
+          <label><input type="radio" name="bet" value="black"><span>Чёрное</span></label>
+          <label><input type="radio" name="bet" value="green"><span>Зеро ×35</span></label>
+        </fieldset>
+        <fieldset class="seg">
+          <legend>Сколько фишек ставим</legend>
+          <label><input type="radio" name="stake" value="10"><span>10</span></label>
+          <label><input type="radio" name="stake" value="50" checked><span>50</span></label>
+          <label><input type="radio" name="stake" value="100"><span>100</span></label>
+        </fieldset>
+        <div class="spin-row">
+          <button id="spin" class="btn" type="button">Крутить</button>
+          <div class="balance">Фишек: <b id="balance">1 000</b></div>
+        </div>
+        <p id="result" class="result" aria-live="polite">Выберите ставку и крутите колесо.</p>
+        <ol id="history" class="history" aria-label="Последние выпавшие числа"></ol>
+        <button id="refill" class="linkbtn" type="button" hidden>Взять новые фишки</button>
+        <p class="fine">Фишки нельзя купить или обменять на деньги.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap" id="klub">
+    <h2>Что внутри</h2>
+    <p class="lead">Мы собрали в одном зале всё, за что любят казино, и убрали главное, за что его боятся, — риск потерять деньги.</p>
+    <div class="trio">
+      <div><h3>Игры</h3><p>Рулетка, покер, блэкджек, турниры и тематические вечера. Ставки — только фишками.</p></div>
+      <div><h3>Кафе</h3><p>Напитки и закуски прямо в игровом зале.</p></div>
+      <div><h3>Праздники</h3><p>Зал можно забронировать для дня рождения или корпоратива.</p></div>
+    </div>
+    <p class="aside">Настоящие казино в России работают только в шести игорных зонах и платят налог 250 000 ₽ в месяц за каждый игровой стол. Мы взяли от казино атмосферу, а ставки на деньги оставили им.</p>
+  </section>
+
+  <section class="block wrap" id="investoru">
+    <div class="invest">
+      <div>
+        <h2>Инвестору: проверьте цифры сами</h2>
+        <p class="lead">На запуск нужно 5 млн ₽, взамен — 40% долей нашего ООО. Сдвиньте ползунок и посмотрите, что будет при разном потоке гостей.</p>
+        <div class="slider-label"><label for="guests">Гостей в день</label><output id="guests-out" for="guests">40</output></div>
+        <input id="guests" type="range" min="10" max="60" step="1" value="40">
+        <div class="scale" aria-hidden="true"><span class="lo">10</span><span class="be">безубыточность ≈ 26</span><span class="hi">60</span></div>
+        <p id="status" class="status ok" aria-live="polite"></p>
+      </div>
+      <div>
+        <dl class="ledger">
+          <div><dt>Выручка в месяц</dt><dd id="v-rev"></dd></div>
+          <div><dt>Расходы</dt><dd id="v-cost"></dd></div>
+          <div><dt>Налог УСН 6%</dt><dd id="v-tax"></dd></div>
+          <div class="sum"><dt id="t-profit">Прибыль в месяц</dt><dd id="v-profit"></dd></div>
+          <div><dt>Доля инвестора, 40%</dt><dd id="v-inv"></dd></div>
+          <div><dt>Окупаемость вложений</dt><dd id="v-pay"></dd></div>
+        </dl>
+        <p id="vat" class="vat" hidden>При таком потоке доход превысит 20 млн ₽ в год и появится НДС — в расчёте он не учтён.</p>
+        <p class="fine" style="margin-top:14px">Как считаем: билет 1 000 ₽ и кафе 400 ₽ с гостя, 25 рабочих дней в месяц, 4 праздника по 25 000 ₽, постоянные расходы 800 000 ₽, переменные 220 ₽ на гостя. Это учебный прогноз.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap" id="rolik">
+    <h2>Наш рекламный ролик</h2>
+    <div class="video-frame">
+      <!-- Положите файл reklama.mp4 в ту же папку, что и index.html, — ролик появится здесь. -->
+      <video id="ad-video" controls playsinline preload="metadata">
+        <source src="reklama.mp4" type="video/mp4" onerror="document.getElementById('ad-video').hidden=true;document.getElementById('ad-missing').hidden=false">
+      </video>
+      <p id="ad-missing" class="video-missing" hidden>Ролик скоро появится здесь.</p>
+    </div>
+  </section>
+
+  <section class="block wrap" id="voprosy">
+    <h2>Вопросы</h2>
+    <div class="faq">
+      <details><summary>Это законно?</summary><p>Да. Азартная игра — это игра на деньги или имущество, а у нас ставок нет: фишки выдаются вместе с билетом, ничего не стоят и не меняются на деньги. Поэтому мы обычный развлекательный клуб, а не казино.</p></details>
+      <details><summary>Что можно выиграть?</summary><p>Место в рейтинге клуба и хорошее настроение. Денег и ценных призов нет — в этом и смысл.</p></details>
+      <details><summary>Сколько стоит вход?</summary><p>Средний билет — около 1 000 ₽, фишки входят в стоимость. Кафе оплачивается отдельно.</p></details>
+      <details><summary>Можно устроить праздник?</summary><p>Да, зал можно забронировать для дня рождения или корпоратива — около 25 000 ₽ за вечер.</p></details>
+      <details><summary>Есть ограничение по возрасту?</summary><p>Да, клуб для гостей от 18 лет.</p></details>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot wrap">
+  <p>«Тартарус» — учебный проект деловой игры «Создай успешный бизнес», 2026.</p>
+  <p>Команда: Михаил — руководство, Артём — оснащение, Денис — финансы, Владислава — маркетинг, Валерия — право и инвесторы.</p>
+  <p>Игра только на фишки, без денежных ставок. 18+</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // Хранилище фишек: работает и там, где localStorage недоступен.
+  var store = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+  var nf = new Intl.NumberFormat("ru-RU");
+  function fmt(n) { return nf.format(Math.round(Math.abs(n))); }
+  function rub(n) { return (n < 0 ? "−" : "") + fmt(n) + " ₽"; }
+  function $(id) { return document.getElementById(id); }
+
+  // ---------- Рулетка ----------
+  var ORDER = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
+  var RED = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+  var STEP = 360 / ORDER.length;
+  var NAMES = { red: "красное", black: "чёрное", green: "зеро" };
+  var FILL = { red: "#9E3328", black: "#1C1612", green: "#2E5B4B" };
+  function colorOf(n) { return n === 0 ? "green" : (RED.indexOf(n) >= 0 ? "red" : "black"); }
+
+  var svg = $("wheel");
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function pt(r, deg) {
+    var a = deg * Math.PI / 180;
+    return [(r * Math.sin(a)).toFixed(2), (-r * Math.cos(a)).toFixed(2)];
+  }
+
+  svg.appendChild(el("circle", { r: 99, fill: "#2B2119", stroke: "#8F6B26", "stroke-width": 2 }));
+  ORDER.forEach(function (n, i) {
+    var c = i * STEP, p1 = pt(92, c - STEP / 2), p2 = pt(92, c + STEP / 2);
+    svg.appendChild(el("path", {
+      d: "M0 0 L" + p1[0] + " " + p1[1] + " A92 92 0 0 1 " + p2[0] + " " + p2[1] + " Z",
+      fill: FILL[colorOf(n)], stroke: "#C9A24A", "stroke-width": 0.4
+    }));
+    var t = el("text", {
+      x: 0, y: -82, transform: "rotate(" + c.toFixed(2) + ")",
+      "text-anchor": "middle", "dominant-baseline": "central",
+      "font-size": 7, "font-weight": 700, fill: "#F1E8D8", "font-family": "Manrope, sans-serif"
+    });
+    t.textContent = n;
+    svg.appendChild(t);
+  });
+  svg.appendChild(el("circle", { r: 70, fill: "#14100D", stroke: "#C9A24A", "stroke-width": 1.5 }));
+  for (var k = 0; k < 8; k++) {
+    var q = pt(66, k * 45);
+    svg.appendChild(el("line", { x1: 0, y1: 0, x2: q[0], y2: q[1], stroke: "#8F6B26", "stroke-width": 1.2 }));
+  }
+  svg.appendChild(el("circle", { r: 22, fill: "#8F6B26", stroke: "#C9A24A", "stroke-width": 1.5 }));
+  var hub = el("text", { x: 0, y: 1, "text-anchor": "middle", "dominant-baseline": "central", "font-size": 24, fill: "#F1E8D8", "font-family": "Forum, Georgia, serif" });
+  hub.textContent = "Т";
+  svg.appendChild(hub);
+  svg.appendChild(el("circle", { r: 96, fill: "none", stroke: "#C9A24A", "stroke-width": 3 }));
+
+  var btn = $("spin"), out = $("result"), balEl = $("balance"), hist = $("history"), refill = $("refill");
+  var balance = parseInt(store.get("tartarus-chips"), 10);
+  if (!isFinite(balance) || balance < 0) balance = 1000;
+  var rotation = 0, spinning = false;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function picked(name) { return document.querySelector('input[name="' + name + '"]:checked').value; }
+
+  function render() {
+    balEl.textContent = fmt(balance);
+    btn.disabled = spinning || balance < Number(picked("stake"));
+    refill.hidden = spinning || balance >= 10;
+    store.set("tartarus-chips", String(balance));
+  }
+
+  function settle(n, bet, stake) {
+    var color = colorOf(n);
+    var win = bet === color;
+    var gain = win ? (bet === "green" ? stake * 35 : stake) : -stake;
+    balance += gain;
+    var li = document.createElement("li");
+    li.className = "c-" + color;
+    li.textContent = n;
+    li.title = n + ", " + NAMES[color];
+    hist.insertBefore(li, hist.firstChild);
+    while (hist.children.length > 8) hist.removeChild(hist.lastChild);
+    out.textContent = win
+      ? "Выпало " + n + ", " + NAMES[color] + ". Плюс " + fmt(gain) + " фишек!"
+      : "Выпало " + n + ", " + NAMES[color] + ". Минус " + fmt(stake) + " фишек — а деньги остались при вас.";
+    spinning = false;
+    render();
+    if (balance < 10) out.textContent += " Фишки закончились — возьмите новые, это бесплатно.";
+  }
+
+  function spin() {
+    var bet = picked("bet"), stake = Number(picked("stake"));
+    if (spinning || balance < stake) return;
+    spinning = true;
+    render();
+    out.textContent = "Колесо крутится…";
+    var buf = new Uint32Array(1);
+    window.crypto.getRandomValues(buf);
+    var idx = buf[0] % ORDER.length;
+    var jitter = (Math.random() - 0.5) * STEP * 0.6;
+    var target = (360 - idx * STEP + jitter + 360) % 360;
+    var current = ((rotation % 360) + 360) % 360;
+    var delta = target - current;
+    if (delta < 0) delta += 360;
+    rotation += (reduce ? 0 : 360 * 5) + delta;
+    svg.style.transform = "rotate(" + rotation + "deg)";
+    setTimeout(function () { settle(ORDER[idx], bet, stake); }, reduce ? 60 : 4300);
+  }
+
+  btn.addEventListener("click", spin);
+  refill.addEventListener("click", function () {
+    balance = 1000;
+    out.textContent = "Держите новые 1 000 фишек. Удачи!";
+    render();
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="stake"]'), function (r) {
+    r.addEventListener("change", function () {
+      render();
+      if (balance >= 10 && balance < Number(picked("stake"))) out.textContent = "Ставка больше, чем у вас фишек, — выберите поменьше.";
+    });
+  });
+  render();
+
+  // ---------- Калькулятор для инвестора ----------
+  var range = $("guests");
+  function calc() {
+    var perDay = Number(range.value), guests = perDay * 25;
+    var revenue = guests * 1400 + 100000;
+    var cost = 800000 + guests * 220;
+    var tax = revenue * 0.06;
+    var profit = revenue - cost - tax;
+    $("guests-out").textContent = perDay;
+    $("v-rev").textContent = rub(revenue);
+    $("v-cost").textContent = rub(-cost);
+    $("v-tax").textContent = rub(-tax);
+    $("t-profit").textContent = profit >= 0 ? "Прибыль в месяц" : "Убыток в месяц";
+    var vp = $("v-profit");
+    vp.textContent = rub(profit);
+    vp.className = profit < 0 ? "neg" : "";
+    $("v-inv").textContent = profit > 0 ? rub(profit * 0.4) + " в месяц" : "пока нет прибыли";
+    $("v-pay").textContent = profit > 0
+      ? "≈ " + (5000000 / profit).toLocaleString("ru-RU", { maximumFractionDigits: 1 }) + " мес."
+      : "не окупается";
+    var st = $("status");
+    st.textContent = profit >= 0 ? "Выше точки безубыточности — бизнес в плюсе." : "Ниже точки безубыточности — бизнес в минусе.";
+    st.className = "status " + (profit >= 0 ? "ok" : "bad");
+    $("vat").hidden = perDay < 45;
+  }
+  range.addEventListener("input", calc);
+  calc();
+
+  // ---------- Ролик: если файла ещё нет, показываем заглушку ----------
+  var video = $("ad-video");
+  function noVideo() { video.hidden = true; $("ad-missing").hidden = false; }
+  video.querySelector("source").addEventListener("error", noVideo);
+  if (video.networkState === 3) noVideo();
+})();
+</script>
+</body>
+</html>
